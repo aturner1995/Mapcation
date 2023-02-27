@@ -10,8 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <link rel="stylesheet" href="./assets/style.css">
+    <link rel="stylesheet" href="./assets/CSS/style.css">
 
 </head>
 <body>
@@ -33,7 +34,7 @@
                 <div class="navbar-end">
                     <div class="navbar-item">
                         <div class="buttons">
-                            <a class="button is-primary" href="/travel-planning.html">
+                            <a class="button is-primary" href="#">
                                 <strong>Start Planning</strong>
                             </a>
                         </div>
@@ -43,8 +44,44 @@
             </div>
         </nav>
     </header>
+
+    <form id="search-form">
+        <div class="field">
+            <label class="label">From (Airport Code)</label>
+            <input type="text" class="input" placeholder="YFC" id="from-airport">
+        </div>
+        <div class="field">
+            <label class="label">To (Airport Code)</label>
+            <input type="text" class="input" placeholder="LAX" id="to-airport">
+        </div>
+        <div class="field">
+            <label class="label">Departure Date</label>
+            <input type="text" class="input" id="datepicker" placeholder="">
+        </div>
+        <div class="field">
+            <label class="label">Return Date</label>
+            <input type="text" class="input" id="datepicker-2" placeholder="">
+        </div>
+        <div class="select">
+            <select id="traveler-number">
+                <option>Number of travelers</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div> 
+        <div class="field">
+            <button class="button is-primary" type="submit">Search</button>
+        </div>               
+    </form>
+
+    <div class="search-results m-5"></div>
     
+
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-    <script src="./assets/script.js"></script>
+    <script src="./assets/JS/flightSearch.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 </body>
 </html>
