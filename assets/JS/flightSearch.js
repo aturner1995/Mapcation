@@ -1,12 +1,3 @@
-$(() => {
-    $("#datepicker").datepicker({
-        dateFormat: 'yy-mm-dd'
-    });
-    $("#datepicker-2").datepicker({
-        dateFormat: 'yy-mm-dd'
-    });
-});
-
 const returnDateEL = $('#datepicker-2');
 const departDateEl = $('#datepicker');
 const fromAirportEl = $('#from-airport');
@@ -76,8 +67,6 @@ const searchFlightInfo = (e) => {
 const displayFlightResults = (data) => {
     searchResultsEl.text('').append($('<h2>').text('Flight Results:'));
 
-
-
     for (let i=0; i< data.data.length; i++) {
         let resultsTextEl = $('<div>');
         resultsTextEl.addClass('card columns my-2');
@@ -102,5 +91,19 @@ $(".navbar-burger").click(() => {
     $(".navbar-burger").toggleClass("is-active");
     $(".navbar-menu").toggleClass("is-active");
 
+});
+
+// JQuery datepicker with custom format and restrictions for dates that can be selected
+$(() => {
+    $("#datepicker").datepicker({
+        dateFormat: 'yy-mm-dd',
+        minDate: 0,
+        maxDate: '+6M'
+    });
+    $("#datepicker-2").datepicker({
+        dateFormat: 'yy-mm-dd',
+        minDate: 0,
+        maxDate: '+7M'
+    });
 });
 

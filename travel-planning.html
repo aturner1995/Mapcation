@@ -45,38 +45,41 @@
         </nav>
     </header>
 
-    <form id="search-form">
-        <div class="field">
-            <label class="label">From (Airport Code)</label>
-            <input type="text" class="input" placeholder="YFC" id="from-airport">
-        </div>
-        <div class="field">
-            <label class="label">To (Airport Code)</label>
-            <input type="text" class="input" placeholder="LAX" id="to-airport">
-        </div>
-        <div class="field">
-            <label class="label">Departure Date</label>
-            <input type="text" class="input" id="datepicker" placeholder="">
-        </div>
-        <div class="field">
-            <label class="label">Return Date</label>
-            <input type="text" class="input" id="datepicker-2" placeholder="">
-        </div>
-        <div class="select">
-            <select id="traveler-number">
-                <option>Number of travelers</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
-        </div> 
-        <div class="field">
-            <button class="button is-primary" type="submit">Search</button>
-        </div>               
-    </form>
-
+    <div class="container is-max-desktop form-border">
+        <form id="search-form">
+            <div class="field">
+                <label class="label">From (Airport Code)</label>
+                <input type="text" class="input" placeholder="YFC" id="from-airport">
+            </div>
+            <div class="field">
+                <label class="label">To (Airport Code)</label>
+                <input type="text" class="input" placeholder="LAX" id="to-airport">
+            </div>
+            <div class="field">
+                <label class="label">Departure Date</label>
+                <input type="text" class="input" id="datepicker" placeholder="">
+            </div>
+            <div class="field">
+                <label class="label">Return Date</label>
+                <input type="text" class="input" id="datepicker-2" placeholder="">
+            </div>
+            <div class="select">
+                <select id="traveler-number">
+                    <option>Number of travelers</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div> 
+            <div class="field has-text-centered my-5">
+                <button class="button is-primary" type="submit">Search</button>
+            </div>               
+        </form>
+    
+    </div>
+    
     <div class="search-results m-5"></div>
     
 
