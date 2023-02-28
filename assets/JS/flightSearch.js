@@ -5,6 +5,7 @@ const toAirportEl = $('#to-airport');
 const searchFormEl = $('#search-form');
 const travelerAmountEl = $('#traveler-number');
 const searchResultsEl = $('.search-results');
+const touristResultsEl = $('.tourist-search-results');
 
 // Search Flights from the users provided form submission
 const searchFlightInfo = (e) => {
@@ -67,23 +68,98 @@ const searchFlightInfo = (e) => {
 const displayFlightResults = (data) => {
     searchResultsEl.text('').append($('<h2>').text('Flight Results:'));
 
-    for (let i=0; i< data.data.length; i++) {
+    data.data.forEach((result) => {
         let resultsTextEl = $('<div>');
         resultsTextEl.addClass('card columns my-2');
         let carrierEl = $('<p>').addClass('column');
         let flightTimeEl = $('<p>');
         let stopsEl = $('<p>').addClass('column');
         let priceEl = $('<p>').addClass('column');
-        stopsEl.text(data.data[i].itineraries[0].segments.length-1 + ' Stop(s)');
-        carrierEl.text(data.data[i].itineraries[0].segments[0].carrierCode + data.data[i].itineraries[0].segments[0].number);
-        priceEl.text('$' + data.data[i].price.total + ' ' + data.data[i].price.currency);
+        stopsEl.text(result.itineraries[0].segments.length-1 + ' Stop(s)');
+        carrierEl.text(result.itineraries[0].segments[0].carrierCode + result.itineraries[0].segments[0].number);
+        priceEl.text('$' + result.price.total + ' ' + result.price.currency);
         resultsTextEl.append(carrierEl, stopsEl, priceEl);
         searchResultsEl.append(resultsTextEl);
-    }
- };
+    });
+};
+
+
+const searchTouristInfo = (e) => {
+    e.preventDefault();
+    let city = toAirportEl.val().trim();
+    const apiKey = 'fsq3arJhFAddvYdLjpsFcyafVbELedluIByUHga/lfOF/XM=';
+    let apiUrl = `https://api.foursquare.com/v3/places/search?query=top%20picks&near=${city}&sort=POPULARITY&limit=10`;
+    let places =[];
+
+    fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            Authorization: 'fsq3arJhFAddvYdLjpsFcyafVbELedluIByUHga/lfOF/XM='
+          }
+    }).then(response => {
+        if (response.ok) {
+            response.json().then(data => {
+                data.results.forEach(place => {
+                    const photoUrl = `https://api.foursquare.com/v3/places/${place.fsq_id}/photos?sortNEWEST`;
+                    const descriptionURL = `https://api.foursquare.com/v3/places/${place.fsq_id}/tips?sort=POPULAR`;
+                    let placeObject = {
+                        id: place.fsq_id,
+                        name: place.name
+                    };
+                    fetch(photoUrl, {
+                        method: 'GET',
+                        headers: {
+                        accept: 'application/json',
+                        Authorization: 'fsq3arJhFAddvYdLjpsFcyafVbELedluIByUHga/lfOF/XM='
+                        }
+                    }).then(response => response.json().then(photoData => {
+                        placeObject.picture = `${photoData[0].prefix}200x200${photoData[0].suffix}`
+                    }))
+                    fetch(descriptionURL, {
+                        method: 'GET',
+                        headers: {
+                            accept: 'application/json',
+                            Authorization: 'fsq3arJhFAddvYdLjpsFcyafVbELedluIByUHga/lfOF/XM='
+                        }
+                    }).then(response => response.json().then(descriptionData => {
+                        placeObject.description = descriptionData[0].text;
+                        places.push(placeObject);
+                        if (places.length === data.results.length) {
+                            displayTouristInfo(places);
+                        }
+                    }))
+                })
+            })
+        }
+    })
+    .catch(error => console.log(error));
+};
+
+const displayTouristInfo = (places) => {
+    console.log(places);
+    touristResultsEl.text('');
+    places.forEach(place => {
+        let resultsTextEl = $('<div>').addClass('card columns');
+        let attractionNameEl = $('<h4>');
+        let attractionImgEl = $('<img>');
+        let descriptionEl = $('<p>');
+        attractionImgEl.attr('src', place.picture).addClass('column');
+        attractionNameEl.text(place.name).addClass('column');
+        descriptionEl.text(place.description);
+        attractionNameEl.append(descriptionEl);
+        resultsTextEl.append(attractionNameEl,attractionImgEl);
+        touristResultsEl.append(resultsTextEl);
+
+
+    })
+}
 
 // Event Listener for form submission
-searchFormEl.on('submit', searchFlightInfo);
+searchFormEl.on('submit', e => {
+    searchFlightInfo(e);
+    searchTouristInfo(e);
+});
 
 // Check for click events on the navbar burger icon
 $(".navbar-burger").click(() => {
@@ -106,4 +182,3 @@ $(() => {
         maxDate: '+7M'
     });
 });
-
