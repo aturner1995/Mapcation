@@ -66,7 +66,6 @@ const searchFlightInfo = async (e) => {
         });
         let toCityData = await toCityResponse.json();
         let toIataCode = toCityData.data[0].iataCode;
-        console.log(toCityData);
 
         apiUrl += `&originLocationCode=${fromIataCode}&destinationLocationCode=${toIataCode}`;
 
@@ -77,7 +76,6 @@ const searchFlightInfo = async (e) => {
             }
         });
         let flightData = await flightResponse.json();
-        console.log(flightData.data.length)
         // if (flightData.data.length === 0 ) {
         //     toIataCode = toCityData.data[1].iataCode;
         //     apiUrl += `&originLocationCode=${fromIataCode}&destinationLocationCode=${toIataCode}`;
@@ -150,8 +148,11 @@ const searchTouristInfo = async (e) => {
                         Authorization: 'fsq3arJhFAddvYdLjpsFcyafVbELedluIByUHga/lfOF/XM='
                     }
                 });
-                const photoData = await photoResponse.json();
-                placeObject.picture = `${photoData[0].prefix}200x200${photoData[0].suffix}`;
+
+                if (photoResponse.ok) {
+                    const photoData = await photoResponse.json();
+                    placeObject.picture = `${photoData[0].prefix}200x200${photoData[0].suffix}`;
+                }
 
                 const descriptionResponse = await fetch(descriptionURL, {
                     method: 'GET',
@@ -160,7 +161,9 @@ const searchTouristInfo = async (e) => {
                         Authorization: 'fsq3arJhFAddvYdLjpsFcyafVbELedluIByUHga/lfOF/XM='
                     }
                 });
-                const descriptionData = await descriptionResponse.json();
+
+                if (descriptionResponse.ok) {
+                    const descriptionData = await descriptionResponse.json();
                 if (descriptionData.length > 0) {
                     placeObject.description = descriptionData[0].text;
                     places.push(placeObject);
@@ -168,6 +171,7 @@ const searchTouristInfo = async (e) => {
                     placeObject.description = '';
                     places.push(placeObject);
                 }
+                }                
             }
             displayTouristInfo(places);
         } else {
@@ -197,7 +201,6 @@ const searchRestaurantInfo = async (e) => {
     
         if (response.ok) {
             const data = await response.json();
-    
             for (const place of data.results) {
                 const photoUrl = `https://api.foursquare.com/v3/places/${place.fsq_id}/photos?sort=POPULAR`;
                 const descriptionURL = `https://api.foursquare.com/v3/places/${place.fsq_id}/tips?sort=POPULAR`;
@@ -205,7 +208,6 @@ const searchRestaurantInfo = async (e) => {
                     id: place.fsq_id,
                     name: place.name
                 };
-    
                 const photoResponse = await fetch(photoUrl, {
                     method: 'GET',
                     headers: {
@@ -229,17 +231,22 @@ const searchRestaurantInfo = async (e) => {
     
                 if (descriptionResponse.ok) {
                     const descriptionData = await descriptionResponse.json();
+                if (descriptionData.length > 0) {
                     placeObject.description = descriptionData[0].text;
                     places.push(placeObject);
-                    if (places.length === data.results.length) {
-                        displayRestaurantInfo(places);
-                    }
+                } else {
+                    placeObject.description = '';
+                    places.push(placeObject);
                 }
+                }                
             }
+            displayRestaurantInfo(places);
+        } else {
+            console.log('Error: ', response.status);
         }
     } catch (error) {
         console.log(error);
-    }    
+    }
 };
 
 
