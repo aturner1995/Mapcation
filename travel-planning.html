@@ -48,12 +48,12 @@
     <div class="container is-max-desktop form-border">
         <form id="search-form">
             <div class="field">
-                <label class="label">From (Airport Code)</label>
-                <input type="text" class="input" placeholder="YFC" id="from-airport">
+                <label class="label">From (City Name)</label>
+                <input type="text" class="input" placeholder="Fredericton" id="from-airport">
             </div>
             <div class="field">
-                <label class="label">To (Airport Code)</label>
-                <input type="text" class="input" placeholder="LAX" id="to-airport">
+                <label class="label">To (City Name)</label>
+                <input type="text" class="input" placeholder="Paris" id="to-airport">
             </div>
             <div class="field">
                 <label class="label">Departure Date</label>
@@ -81,7 +81,11 @@
     </div>
     
     <div class="search-results m-5"></div>
-    <div class="tourist-search-results m-5"></div>
+    <div class="columns">
+        <div class="tourist-search-results m-5 column"></div>
+        <div class="restaurant-results m-5 column"></div>
+    </div>
+
     
 
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
