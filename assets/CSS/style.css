@@ -18,3 +18,16 @@ h1,h2,h3,h4,h5,h6 {
     border-radius: 10px;
     padding: 20px;
 }
+
+.text-container h4 {
+    padding-left: 0;
+    padding-bottom: 0;
+}
+
+.suggestion-card-image {
+    height: 200px;
+    width: 200px;
+    object-fit: scale-down;
+    display: flex;
+    margin: auto;
+}
