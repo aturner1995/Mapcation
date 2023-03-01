@@ -250,7 +250,7 @@ const displayTouristInfo = (places) => {
     places.forEach(place => {
         let resultsTextEl = $('<div>').addClass('card my-2 columns');
         let attractionNameEl = $('<h4>').addClass('column');
-        let attractionImgEl = $('<img>').addClass('column card-image image');
+        let attractionImgEl = $('<img>').addClass('column suggestion-card-image image');
         let descriptionEl = $('<p>');
         attractionImgEl.attr('src', place.picture);
         attractionNameEl.text(place.name);
@@ -269,7 +269,7 @@ const displayRestaurantInfo = (places) => {
     places.forEach(place => {
         let resultsTextEl = $('<div>').addClass('card my-2 columns');
         let attractionNameEl = $('<h4>').addClass('column');
-        let attractionImgEl = $('<img>').addClass('column card-image');
+        let attractionImgEl = $('<img>').addClass('column suggestion-card-image');
         let descriptionEl = $('<p>');
         attractionImgEl.attr('src', place.picture).addClass('image');
         attractionNameEl.text(place.name);
