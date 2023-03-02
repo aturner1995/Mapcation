@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <link rel="stylesheet" href="./assets/CSS/style.css">
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+    crossorigin=""/>
 </head>
 <body>
     <header>
@@ -44,7 +47,11 @@
             </div>
         </nav>
     </header>
-
+    
+    <div id="map" class="m-5">
+        
+    </div>
+    
     <div class="container is-max-desktop form-border">
         <form id="search-form">
             <div class="field">
@@ -85,8 +92,12 @@
         <div class="tourist-search-results m-5 column"></div>
         <div class="restaurant-results m-5 column"></div>
     </div>
-
     
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+    crossorigin=""></script>
+    <script src="./assets/JS/script.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <script src="./assets/JS/flightSearch.js"></script>
