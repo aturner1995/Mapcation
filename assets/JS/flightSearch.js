@@ -259,8 +259,9 @@ const displayTouristInfo = (places) => {
         let attractionNameEl = $('<h4>').addClass('column');
         let attractionImgEl = $('<img>').addClass('column suggestion-card-image image');
         let descriptionEl = $('<p>');
+        let addBtn = $('<button>').text('ADD').addClass('button is-primary ml-2 is-small add-btn');
         attractionImgEl.attr('src', place.picture);
-        attractionNameEl.text(place.name);
+        attractionNameEl.text(place.name).append(addBtn);
         descriptionEl.text(place.description);
         let textContainerEl = $('<div>').addClass('text-container pl-1');
         textContainerEl.append(attractionNameEl, descriptionEl);
@@ -278,8 +279,9 @@ const displayRestaurantInfo = (places) => {
         let attractionNameEl = $('<h4>').addClass('column');
         let attractionImgEl = $('<img>').addClass('column suggestion-card-image');
         let descriptionEl = $('<p>');
+        let addBtn = $('<button>').text('ADD').addClass('button is-primary ml-2 is-small add-btn');
         attractionImgEl.attr('src', place.picture).addClass('image');
-        attractionNameEl.text(place.name);
+        attractionNameEl.text(place.name).append(addBtn);
         descriptionEl.text(place.description);
         let textContainerEl = $('<div>').addClass('text-container pl-1');
         textContainerEl.append(attractionNameEl, descriptionEl);
@@ -288,12 +290,19 @@ const displayRestaurantInfo = (places) => {
     })
 }
 
+const addLocation = () => {
+    console.log("Yo what up dawg");
+}
+
 // Event Listener for form submission
 searchFormEl.on('submit', e => {
     searchFlightInfo(e);
     searchTouristInfo(e);
     searchRestaurantInfo(e);
 });
+
+$('body').on('click', 'button.add-btn', addLocation);
+
 
 // Check for click events on the navbar burger icon
 $(".navbar-burger").click(() => {
