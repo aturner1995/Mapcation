@@ -75,30 +75,52 @@ const searchFlightInfo = async (fromCity, toCity, departDate, returnDate, travel
             }
         });
         let flightData = await flightResponse.json();
-        // if (flightData.data.length === 0 ) {
-        //     toIataCode = toCityData.data[1].iataCode;
-        //     apiUrl += `&originLocationCode=${fromIataCode}&destinationLocationCode=${toIataCode}`;
-        //     console.log(apiUrl);
-        //     const flightResponseTwo = await fetch(apiUrl, {
-        //         method: 'GET',
-        //         headers: {
-        //             'Authorization': `Bearer ${token}`
-        //         }
-        //     });
-        //     flightData = await flightResponseTwo.json();
-        //     console.log(flightData);
-        // }
-
-        displayFlightResults(flightData);
+        // If the city search first result provides an incorrect IATA code the function will then search the second city IATA
+        // code. If the second provides no results then the flight results are displayed with an error message.
+        if (flightData.data.length === 0) {
+            toIataCode = toCityData.data[1].iataCode;
+            let apiUrl = `https://test.api.amadeus.com/v2/shopping/flight-offers?departureDate=${departDate}&max=3&currencyCode=CAD`;
+            // Changing the api URL based on the user inputs
+            if (returnDate) {
+                apiUrl += `&returnDate=${returnDate}`;
+            }
+            if (travelerAmount === 'Number of travelers') {
+                apiUrl += `&adults=1`
+            }
+            else {
+                apiUrl += `&adults=${travelerAmount}`;
+            }
+            apiUrl += `&originLocationCode=${fromIataCode}&destinationLocationCode=${toIataCode}`;
+            // Call the API for the new api url
+            const flightDataPromise = new Promise((resolve) => {
+              setTimeout(async () => {
+                const flightResponseTwo = await fetch(apiUrl, {
+                  method: 'GET',
+                  headers: {
+                    'Authorization': `Bearer ${token}`
+                  }
+                });
+                const flightData = await flightResponseTwo.json();
+                resolve(flightData);
+              }, 1000); // waits for 1 seconds before fetching flight data to avoid API errors
+            });          
+            flightData = await flightDataPromise;
+          }         
+        displayFlightResults(flightData, fromCity, toCity, travelerAmount);
     } catch (error) {
         console.log(error);
     }
 };
 
 // Display Flight results to the page
-const displayFlightResults = (data) => {
-    searchResultsEl.text('').append($('<h2>').text('Flight Results:'));
-
+const displayFlightResults = (data, fromCity, toCity, travelerAmount) => {
+    searchResultsEl.text('').append($('<h2>').text(`Flight Results: ${fromCity}-${toCity} (${travelerAmount} Traveler(s))`));
+    // If no flight results can be found then that is displayed to the user
+    if (data.data.length === 0) {
+        searchResultsEl.append($('<p>').text('Sorry, no flight results could be found'));
+        return;
+    }
+    // Display the flight results on the page as a card for each with the flight number, price and # of stops
     data.data.forEach((result) => {
         let resultsTextEl = $('<div>');
         resultsTextEl.addClass('card columns my-2');
@@ -351,12 +373,11 @@ const saveRecentSearch = (fromCity, toCity, departDate, returnDate, travelerAmou
         obj.departDate === departDate &&
         obj.returnDate === returnDate
     );
-
+    // If it is not a duplicate then add the search to the recent search local storage
     if (!isDuplicate) {
         recentSearch.push(searchObj);
         localStorage.setItem('recentSearch', JSON.stringify(recentSearch));
     }
-
     displayRecentSearch(recentSearch);
 }
 
@@ -423,6 +444,7 @@ const searchForm = (e) => {
     searchTouristInfo(toCity);
     searchRestaurantInfo(toCity);
     saveRecentSearch(fromCity, toCity, departDate, returnDate, travelerAmount);
+    displayFavLocations();
 }
 
 
