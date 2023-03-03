@@ -27,8 +27,19 @@ h1,h2,h3,h4,h5,h6 {
 .suggestion-card-image {
     height: 200px;
     width: 200px;
-    object-fit: scale-down;
+    max-width: 200px;
+    max-height: 200px;
     display: flex;
-    margin: auto;
+ }
+
+.select {
+    position: relative;
+    z-index: 0;
 }
+
+.fav-places, .recent-search {
+    min-height: 250px;
+}
+  
 #map { height: 350px; }
+
