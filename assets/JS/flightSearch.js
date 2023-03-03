@@ -293,6 +293,8 @@ searchFormEl.on('submit', e => {
     searchFlightInfo(e);
     searchTouristInfo(e);
     searchRestaurantInfo(e);
+    showVideos(e);
+   
 });
 
 // Check for click events on the navbar burger icon

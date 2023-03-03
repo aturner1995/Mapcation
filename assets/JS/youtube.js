@@ -1,12 +1,10 @@
-
-
-const toAirportEl = $('#to-airport');
-const toCity = toAirportEl.val().trim();
-const videoSearchEl = $('.video-search-results');
+// const toAirportEl = $('#to-airport');
+var cityName = toAirportEl.val().trim();
+var videoContainerEl = $('#video-container');
+var videoHeaderEl = $('#video-header');
 // ! just for testing purpose, delete line 7 when pushing to main
-citySearched = 'boston';
-var featureAreaEl = $('.feature-area');
-var citySearchedListEl = $('.citySearchedList');
+cityName = 'bosdton';
+
 
 // ! save user input to local storage if they are not stored already; needs 
 // let searchedCityList = JSON.parse(localStorage.getItem('cities')) || [];
@@ -17,33 +15,26 @@ var citySearchedListEl = $('.citySearchedList');
 //     console.log(savedCities);                
 // }; 
 
+// 4 5
 
-var youTubeApi = `https://www.googleapis.com/youtube/v3/search?&type=video&videoDefinition=high&q=${toCity}+travel&key=AIzaSyA27MKlhWDOB4wzTsYuPIELdowswQ5byqs&part=snippet`;
+var youTubeApi = `https://www.googleapis.com/youtube/v3/search?&type=video&videoDefinition=high&part=snippet&q=${cityName}+tour&key=AIzaSyDJdWQxhrMsK9vQQYEqlKgH53uK3xnf744`;
 
+var showVideos = function(){
+    videoContainerEl.text('');
+    let videoHeaderEl = $('<h2>').text('YouTube Travel Guide: ');
+    videoContainerEl.append(videoHeaderEl);
 
-
-fetch(youTubeApi)
-.then(function(response){
-    if(response.ok){
-        response.json().then((function cityList(data){
-            // console.log(data);
-           
-        }   
-        ))
+    fetch(youTubeApi)
+    .then(function(response){       
+        return response.json()})
+        .then((data)=>{
+            console.log(data);       
+            let videos = data.items;
+            for(video of videos) {
+                var cityvideo = `<img src='${video.snippet.thumbnails.medium.url}'>`
+                videoContainerEl.append(cityvideo);
+            }
+        });
+        
     }
-}
-).then(function(){})
 
-let showCities = function(){
-    let savedCities = JSON.parse(localStorage.getItem('cities')) || [];  
-    console.log(savedCities);
-    for(i=0; i<savedCities.length; i++){
-    // var citySearchedListEl = document.createElement('div');
-    // citySearchedListEl.setAttribute('class', 'citySearchedList');  
-    console.log(savedCities[i]);
-    // citySearchedListEl.textContent = ;     
-    featureAreaEl.append('<p class="citySearchedList"> dsdsds </p>');
-}
-}
-
-showCities();
