@@ -18,7 +18,9 @@ var citySearchedListEl = $('.citySearchedList');
 // }; 
 
 
-var youTubeApi = 'https://www.googleapis.com/youtube/v3/search?&type=video&videoDefinition=high&q=${toCity}+travel&key=AIzaSyA27MKlhWDOB4wzTsYuPIELdowswQ5byqs&part=snippet';
+var youTubeApi = `https://www.googleapis.com/youtube/v3/search?&type=video&videoDefinition=high&q=${toCity}+travel&key=AIzaSyA27MKlhWDOB4wzTsYuPIELdowswQ5byqs&part=snippet`;
+
+
 
 fetch(youTubeApi)
 .then(function(response){
