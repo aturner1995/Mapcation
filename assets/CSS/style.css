@@ -30,7 +30,7 @@ h1,h2,h3,h4,h5,h6 {
     max-width: 200px;
     max-height: 200px;
     display: flex;
-}
+ }
 
 .select {
     position: relative;
@@ -41,3 +41,5 @@ h1,h2,h3,h4,h5,h6 {
     min-height: 250px;
 }
   
+#map { height: 350px; }
+
