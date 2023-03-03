@@ -95,7 +95,7 @@ const searchFlightInfo = async (fromCity, toCity, departDate, returnDate, travel
     }
 };
 
-
+// Display Flight results to the page
 const displayFlightResults = (data) => {
     searchResultsEl.text('').append($('<h2>').text('Flight Results:'));
 
@@ -286,36 +286,44 @@ const displayRestaurantInfo = (places) => {
 }
 
 const addLocation = (e) => {
-    e.preventDefault();
     let recentSearch = JSON.parse(localStorage.getItem('recentSearch')) || [];
     let card = $(e.target).closest('.card');
     let nameEl = card.find('h4');
-    console.log(nameEl.text().replace('ADD',''));
     let imgEl = card.find('img');
-    console.log(imgEl.attr('src'));
 
-    let savedLocation = {
-        name: nameEl.text().replace('ADD',''),
-        image: imgEl.attr('src')
-    };
+    let name = nameEl.text().replace('ADD','')
 
-    recentSearch[recentSearch.length - 1].savedLocations.push(savedLocation);
-    localStorage.setItem('recentSearch', JSON.stringify(recentSearch));
-    displayFavLocations();
+    if (!(recentSearch[recentSearch.length - 1].savedLocations.some(location => location.name === name))) {
+        let savedLocation = {
+            name: name,
+            image: imgEl.attr('src')
+        };
+    
+        recentSearch[recentSearch.length - 1].savedLocations.push(savedLocation);
+        localStorage.setItem('recentSearch', JSON.stringify(recentSearch));
+        displayFavLocations();
+    }
 };
 
 const displayFavLocations = () => {
     let recentSearch = JSON.parse(localStorage.getItem('recentSearch')) || [];
     favLocationsEl.empty();
-    console.log(recentSearch);
 
     recentSearch[recentSearch.length-1].savedLocations.forEach(place => {
-        console.log(place.name);
-        let locationDisplayEl = $('<button>').text(place.name).addClass('button is-primary');
+        let locationDisplayEl = $('<button>').text(place.name).addClass('button is-primary m-5 pr-0 fav-btn');
+        let deleteBtn = $('<button>').addClass('delete is-large ml-2');
+        locationDisplayEl.append(deleteBtn);
         favLocationsEl.append(locationDisplayEl);
     })
 
-
+    $('body').on('click', 'button.delete', (e) => {
+        e.stopPropagation();
+        let index = $(e.target).closest('.fav-btn').index();
+        console.log(recentSearch)
+        recentSearch[recentSearch.length-1].savedLocations.splice(index, 1);
+        localStorage.setItem('recentSearch', JSON.stringify(recentSearch));
+        displayFavLocations();
+    });
 }
 
 
@@ -358,10 +366,46 @@ const displayRecentSearch = () => {
     savedSearchesEl.empty();
 
     for (var i=recentSearch.length-1; i >=0; i--) {
-        let cityDisplayEl = $('<button>').text(recentSearch[i].toCity).addClass('button is-primary');
+        let cityDisplayEl = $('<button>').text(`${recentSearch[i].toCity} (${recentSearch[i].departDate}/${recentSearch[i].returnDate})`).addClass('button is-primary recent-btn m-5 pr-0').data('location', i);
+        let deleteBtn = $('<button>').addClass('delete is-large ml-2');
+        cityDisplayEl.append(deleteBtn);
         savedSearchesEl.append(cityDisplayEl);
+
+        deleteBtn.on('click', (e) => {
+            e.stopPropagation();
+            let index = $(e.target).closest('.recent-btn').data('location');
+            recentSearch.splice(index, 1);
+            localStorage.setItem('recentSearch', JSON.stringify(recentSearch));
+            displayRecentSearch();
+        });
     }    
+};
+
+// When user clicks on the recent search button the function gets 
+const recentSearchAgain = (e) => {
+    let recentSearch = JSON.parse(localStorage.getItem('recentSearch')) || [];
+    let index = $(e.target).data('location')
+
+    let clickedSearch = recentSearch[index];
+    let fromCity = recentSearch[index].fromCity;
+    let toCity = recentSearch[index].toCity;
+    let departDate = recentSearch[index].departDate;
+    let returnDate = recentSearch[index].returnDate;
+    let travelerAmount = recentSearch[index].travelerAmount;
+
+    recentSearch.splice(index, 1);
+
+    recentSearch.push(clickedSearch);
+
+    localStorage.setItem('recentSearch', JSON.stringify(recentSearch));
+
+    displayRecentSearch();
+    displayFavLocations();
+    searchFlightInfo(fromCity, toCity, departDate, returnDate, travelerAmount);
+    searchTouristInfo(toCity);
+    searchRestaurantInfo(toCity);
 }
+
 
 const init = () => {
     displayRecentSearch();
@@ -386,6 +430,8 @@ const searchForm = (e) => {
 searchFormEl.on('submit', searchForm)
 // Event listener for the add location button
 $('body').on('click', 'button.add-btn', addLocation);
+
+$('body').on('click', 'button.recent-btn', recentSearchAgain)
 
 
 // Check for click events on the navbar burger icon
