@@ -63,11 +63,11 @@
             </div>
             <div class="field">
                 <label class="label">Departure Date</label>
-                <input type="text" class="input" id="datepicker" placeholder="">
+                <input type="text" class="input" id="datepicker" placeholder="" autocomplete="off">
             </div>
             <div class="field">
                 <label class="label">Return Date</label>
-                <input type="text" class="input" id="datepicker-2" placeholder="">
+                <input type="text" class="input" id="datepicker-2" placeholder="" autocomplete="off">
             </div>
             <div class="select">
                 <select id="traveler-number">
@@ -85,6 +85,18 @@
         </form>
     
     </div>
+
+    <div class="columns">
+        <div class="card m-5 column">
+            <h2>Saved Itinerary</h2>
+            <div class="fav-places"></div>
+        </div>
+        <div class="column card m-5">
+            <h2>Recent Searches</h2>
+            <div class="recent-search"></div>
+        </div>
+    </div>
+
 
     <div id="map" class="m-5">
         

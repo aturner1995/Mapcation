@@ -1,3 +1,4 @@
+// HTML ID and Class selectors with Jquery
 const returnDateEL = $('#datepicker-2');
 const departDateEl = $('#datepicker');
 const fromAirportEl = $('#from-airport');
@@ -7,26 +8,23 @@ const travelerAmountEl = $('#traveler-number');
 const searchResultsEl = $('.search-results');
 const touristResultsEl = $('.tourist-search-results');
 const restaurantResultsEL = $('.restaurant-results');
+const savedSearchesEl = $('.recent-search');
+const favLocationsEl = $('.fav-places');
 
 // Search Flights from the users provided form submission
-const searchFlightInfo = async (e) => {
-    e.preventDefault();
-    const fromCity = fromAirportEl.val().trim();
-    const toCity = toAirportEl.val().trim();
-    const departDate = departDateEl.val().trim();
-    const returnDate = returnDateEL.val().trim();
-    const travelerAmount = travelerAmountEl.val();
-
+const searchFlightInfo = async (fromCity, toCity, departDate, returnDate, travelerAmount) => {
+    // These three parameters are required for flight search. Travel suggestions only require the final destination city.
+    // Application will not call flight search API but other features will still be functional.
     if (!fromCity || !toCity || !departDate) {
         console.error("Please provide the From City, To City and the departure date");
         return;
     }
-
+    // API ID's
     const clientId = 'lLPyMvwNle3XBM8mEfVHLOflW3uOnZUY';
     const clientSecret = 'B4t2EjT9aY2jGtfA';
     const tokenUrl = 'https://test.api.amadeus.com/v1/security/oauth2/token';
     let apiUrl = `https://test.api.amadeus.com/v2/shopping/flight-offers?departureDate=${departDate}&max=3&currencyCode=CAD`;
-    
+    // Changing the api URL based on the user inputs
     if (returnDate) {
         apiUrl += `&returnDate=${returnDate}`;
     }
@@ -38,6 +36,7 @@ const searchFlightInfo = async (e) => {
     }
 
     try {
+        // POST Call to API to get a token to use for the flight search API call
         const tokenResponse = await fetch(tokenUrl, {
             method: 'POST',
             headers: {
@@ -48,7 +47,7 @@ const searchFlightInfo = async (e) => {
 
         const tokenData = await tokenResponse.json();
         const token = tokenData.access_token;
-
+        // API call to get the from city IATA code for flight search
         const fromCityResponse = await fetch(`https://test.api.amadeus.com/v1/reference-data/locations/cities?keyword=${fromCity}&max=10&include=AIRPORTS`, {
             method: 'GET',
             headers: {
@@ -57,7 +56,7 @@ const searchFlightInfo = async (e) => {
         });
         const fromCityData = await fromCityResponse.json();
         const fromIataCode = fromCityData.data[0].iataCode;
-
+        // API call to get the destination IATA code for flight search
         const toCityResponse = await fetch(`https://test.api.amadeus.com/v1/reference-data/locations/cities?keyword=${toCity}&max=10&include=AIRPORTS`, {
             method: 'GET',
             headers: {
@@ -68,7 +67,7 @@ const searchFlightInfo = async (e) => {
         let toIataCode = toCityData.data[0].iataCode;
 
         apiUrl += `&originLocationCode=${fromIataCode}&destinationLocationCode=${toIataCode}`;
-
+        // Flight Search API to get final search information for display
         let flightResponse = await fetch(apiUrl, {
             method: 'GET',
             headers: {
@@ -76,30 +75,52 @@ const searchFlightInfo = async (e) => {
             }
         });
         let flightData = await flightResponse.json();
-        // if (flightData.data.length === 0 ) {
-        //     toIataCode = toCityData.data[1].iataCode;
-        //     apiUrl += `&originLocationCode=${fromIataCode}&destinationLocationCode=${toIataCode}`;
-        //     console.log(apiUrl);
-        //     const flightResponseTwo = await fetch(apiUrl, {
-        //         method: 'GET',
-        //         headers: {
-        //             'Authorization': `Bearer ${token}`
-        //         }
-        //     });
-        //     flightData = await flightResponseTwo.json();
-        //     console.log(flightData);
-        // }
-
-        displayFlightResults(flightData);
+        // If the city search first result provides an incorrect IATA code the function will then search the second city IATA
+        // code. If the second provides no results then the flight results are displayed with an error message.
+        if (flightData.data.length === 0) {
+            toIataCode = toCityData.data[1].iataCode;
+            let apiUrl = `https://test.api.amadeus.com/v2/shopping/flight-offers?departureDate=${departDate}&max=3&currencyCode=CAD`;
+            // Changing the api URL based on the user inputs
+            if (returnDate) {
+                apiUrl += `&returnDate=${returnDate}`;
+            }
+            if (travelerAmount === 'Number of travelers') {
+                apiUrl += `&adults=1`
+            }
+            else {
+                apiUrl += `&adults=${travelerAmount}`;
+            }
+            apiUrl += `&originLocationCode=${fromIataCode}&destinationLocationCode=${toIataCode}`;
+            // Call the API for the new api url
+            const flightDataPromise = new Promise((resolve) => {
+              setTimeout(async () => {
+                const flightResponseTwo = await fetch(apiUrl, {
+                  method: 'GET',
+                  headers: {
+                    'Authorization': `Bearer ${token}`
+                  }
+                });
+                const flightData = await flightResponseTwo.json();
+                resolve(flightData);
+              }, 1000); // waits for 1 seconds before fetching flight data to avoid API errors
+            });          
+            flightData = await flightDataPromise;
+          }         
+        displayFlightResults(flightData, fromCity, toCity, travelerAmount);
     } catch (error) {
         console.log(error);
     }
 };
 
-
-const displayFlightResults = (data) => {
-    searchResultsEl.text('').append($('<h2>').text('Flight Results:'));
-
+// Display Flight results to the page
+const displayFlightResults = (data, fromCity, toCity, travelerAmount) => {
+    searchResultsEl.text('').append($('<h2>').text(`Flight Results: ${fromCity}-${toCity} (${travelerAmount} Traveler(s))`));
+    // If no flight results can be found then that is displayed to the user
+    if (data.data.length === 0) {
+        searchResultsEl.append($('<p>').text('Sorry, no flight results could be found'));
+        return;
+    }
+    // Display the flight results on the page as a card for each with the flight number, price and # of stops
     data.data.forEach((result) => {
         let resultsTextEl = $('<div>');
         resultsTextEl.addClass('card columns my-2');
@@ -116,9 +137,7 @@ const displayFlightResults = (data) => {
 };
 
 
-const searchTouristInfo = async (e) => {
-    e.preventDefault();
-    let city = toAirportEl.val().trim();
+const searchTouristInfo = async (city) => {
     const apiKey = 'fsq3arJhFAddvYdLjpsFcyafVbELedluIByUHga/lfOF/XM=';
     let apiUrl = `https://api.foursquare.com/v3/places/search?query=top%20picks&near=${city}&sort=POPULARITY&limit=10&exclude_all_chains=true`;
     let places = [];
@@ -183,9 +202,7 @@ const searchTouristInfo = async (e) => {
 };
 
 
-const searchRestaurantInfo = async (e) => {
-    e.preventDefault();
-    let city = toAirportEl.val().trim();
+const searchRestaurantInfo = async (city) => {
     const apiKey = 'fsq3arJhFAddvYdLjpsFcyafVbELedluIByUHga/lfOF/XM=';
     let apiUrl = `https://api.foursquare.com/v3/places/search?query=restaurants&near=${city}&sort=POPULARITY&limit=10&exclude_all_chains=true`;
     let places =[];
@@ -259,8 +276,9 @@ const displayTouristInfo = (places) => {
         let attractionNameEl = $('<h4>').addClass('column');
         let attractionImgEl = $('<img>').addClass('column suggestion-card-image image');
         let descriptionEl = $('<p>');
+        let addBtn = $('<button>').text('ADD').addClass('button is-primary ml-2 is-small add-btn');
         attractionImgEl.attr('src', place.picture);
-        attractionNameEl.text(place.name);
+        attractionNameEl.text(place.name).append(addBtn);
         descriptionEl.text(place.description);
         let textContainerEl = $('<div>').addClass('text-container pl-1');
         textContainerEl.append(attractionNameEl, descriptionEl);
@@ -278,8 +296,9 @@ const displayRestaurantInfo = (places) => {
         let attractionNameEl = $('<h4>').addClass('column');
         let attractionImgEl = $('<img>').addClass('column suggestion-card-image');
         let descriptionEl = $('<p>');
+        let addBtn = $('<button>').text('ADD').addClass('button is-primary ml-2 is-small add-btn');
         attractionImgEl.attr('src', place.picture).addClass('image');
-        attractionNameEl.text(place.name);
+        attractionNameEl.text(place.name).append(addBtn);
         descriptionEl.text(place.description);
         let textContainerEl = $('<div>').addClass('text-container pl-1');
         textContainerEl.append(attractionNameEl, descriptionEl);
@@ -288,14 +307,154 @@ const displayRestaurantInfo = (places) => {
     })
 }
 
+const addLocation = (e) => {
+    let recentSearch = JSON.parse(localStorage.getItem('recentSearch')) || [];
+    let card = $(e.target).closest('.card');
+    let nameEl = card.find('h4');
+    let imgEl = card.find('img');
+
+    let name = nameEl.text().replace('ADD','')
+
+    if (!(recentSearch[recentSearch.length - 1].savedLocations.some(location => location.name === name))) {
+        let savedLocation = {
+            name: name,
+            image: imgEl.attr('src')
+        };
+    
+        recentSearch[recentSearch.length - 1].savedLocations.push(savedLocation);
+        localStorage.setItem('recentSearch', JSON.stringify(recentSearch));
+        displayFavLocations();
+    }
+};
+
+const displayFavLocations = () => {
+    let recentSearch = JSON.parse(localStorage.getItem('recentSearch')) || [];
+    favLocationsEl.empty();
+
+    recentSearch[recentSearch.length-1].savedLocations.forEach(place => {
+        let locationDisplayEl = $('<button>').text(place.name).addClass('button is-primary m-5 pr-0 fav-btn');
+        let deleteBtn = $('<button>').addClass('delete is-large ml-2');
+        locationDisplayEl.append(deleteBtn);
+        favLocationsEl.append(locationDisplayEl);
+    })
+
+    $('body').on('click', 'button.delete', (e) => {
+        e.stopPropagation();
+        let index = $(e.target).closest('.fav-btn').index();
+        console.log(recentSearch)
+        recentSearch[recentSearch.length-1].savedLocations.splice(index, 1);
+        localStorage.setItem('recentSearch', JSON.stringify(recentSearch));
+        displayFavLocations();
+    });
+}
+
+
+const saveRecentSearch = (fromCity, toCity, departDate, returnDate, travelerAmount) => {
+
+    if (travelerAmount === 'Number of travelers') {
+        travelerAmount = 1;
+    }
+
+    let recentSearch = JSON.parse(localStorage.getItem('recentSearch')) || [];
+
+    const searchObj = {
+        fromCity: fromCity,
+        toCity: toCity,
+        departDate: departDate,
+        returnDate: returnDate,
+        travelerAmount: travelerAmount,
+        savedLocations: []
+    };
+
+    // Check if the search object is already in recentSearch
+    const isDuplicate = recentSearch.some(obj =>
+        obj.fromCity === fromCity &&
+        obj.toCity === toCity &&
+        obj.departDate === departDate &&
+        obj.returnDate === returnDate
+    );
+    // If it is not a duplicate then add the search to the recent search local storage
+    if (!isDuplicate) {
+        recentSearch.push(searchObj);
+        localStorage.setItem('recentSearch', JSON.stringify(recentSearch));
+    }
+    displayRecentSearch(recentSearch);
+}
+
+
+const displayRecentSearch = () => {
+    let recentSearch = JSON.parse(localStorage.getItem('recentSearch')) || [];
+    savedSearchesEl.empty();
+
+    for (var i=recentSearch.length-1; i >=0; i--) {
+        let cityDisplayEl = $('<button>').text(`${recentSearch[i].toCity} (${recentSearch[i].departDate}/${recentSearch[i].returnDate})`).addClass('button is-primary recent-btn m-5 pr-0').data('location', i);
+        let deleteBtn = $('<button>').addClass('delete is-large ml-2');
+        cityDisplayEl.append(deleteBtn);
+        savedSearchesEl.append(cityDisplayEl);
+
+        deleteBtn.on('click', (e) => {
+            e.stopPropagation();
+            let index = $(e.target).closest('.recent-btn').data('location');
+            recentSearch.splice(index, 1);
+            localStorage.setItem('recentSearch', JSON.stringify(recentSearch));
+            displayRecentSearch();
+        });
+    }    
+};
+
+// When user clicks on the recent search button the function gets 
+const recentSearchAgain = (e) => {
+    let recentSearch = JSON.parse(localStorage.getItem('recentSearch')) || [];
+    let index = $(e.target).data('location')
+
+    let clickedSearch = recentSearch[index];
+    let fromCity = recentSearch[index].fromCity;
+    let toCity = recentSearch[index].toCity;
+    let departDate = recentSearch[index].departDate;
+    let returnDate = recentSearch[index].returnDate;
+    let travelerAmount = recentSearch[index].travelerAmount;
+
+    recentSearch.splice(index, 1);
+
+    recentSearch.push(clickedSearch);
+
+    localStorage.setItem('recentSearch', JSON.stringify(recentSearch));
+
+    displayRecentSearch();
+    displayFavLocations();
+    searchFlightInfo(fromCity, toCity, departDate, returnDate, travelerAmount);
+    searchTouristInfo(toCity);
+    searchRestaurantInfo(toCity);
+}
+
+
+const init = () => {
+    displayRecentSearch();
+}
+
+const searchForm = (e) => {
+    e.preventDefault();
+    let fromCity = fromAirportEl.val().trim();
+    let toCity = toAirportEl.val().trim();
+    let departDate = departDateEl.val().trim();
+    let returnDate = returnDateEL.val().trim();
+    let travelerAmount = travelerAmountEl.val();
+
+    searchFlightInfo(fromCity, toCity, departDate, returnDate, travelerAmount);
+    searchTouristInfo(toCity);
+    searchRestaurantInfo(toCity);
+    saveRecentSearch(fromCity, toCity, departDate, returnDate, travelerAmount);
+    displayFavLocations();
+}
+
+
 // Event Listener for form submission
-searchFormEl.on('submit', e => {
-    searchFlightInfo(e);
-    searchTouristInfo(e);
-    searchRestaurantInfo(e);
-    showVideos(e);
-   
-});
+searchFormEl.on('submit', searchForm)
+// Event listener for the add location button
+$('body').on('click', 'button.add-btn', addLocation);
+
+$('body').on('click', 'button.recent-btn', recentSearchAgain)
+
 
 // Check for click events on the navbar burger icon
 $(".navbar-burger").click(() => {
@@ -318,3 +477,5 @@ $(() => {
         maxDate: '+7M'
     });
 });
+
+init();
