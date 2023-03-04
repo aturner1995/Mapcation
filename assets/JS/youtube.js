@@ -1,28 +1,20 @@
 // const toAirportEl = $('#to-airport');
-var cityName = toAirportEl.val().trim();
-var videoContainerEl = $('#video-container');
-var videoHeaderEl = $('#video-header');
-// ! just for testing purpose, delete line 7 when pushing to main
-cityName = 'bosdton';
 
-
-// ! save user input to local storage if they are not stored already; needs 
-// let searchedCityList = JSON.parse(localStorage.getItem('cities')) || [];
-// if(!searchedCityList.includes(citySearched)) {
-//     searchedCityList.push(citySearched);
-//     localStorage.setItem('cities', JSON.stringify(searchedCityList));    
-//     var savedCities = JSON.parse(localStorage.getItem('cities')) || [];
-//     console.log(savedCities);                
-// }; 
-
-// 4 5
-
-var youTubeApi = `https://www.googleapis.com/youtube/v3/search?&type=video&videoDefinition=high&part=snippet&q=${cityName}+tour&key=AIzaSyDJdWQxhrMsK9vQQYEqlKgH53uK3xnf744`;
+const videoAreaEl = $('#video-area');
+const videoTitleContainerEL = $('#video-title-container');
+const videoContainerEl = $('#video-container');
+const videoHeaderEl = $('#video-header');
 
 var showVideos = function(){
-    videoContainerEl.text('');
-    let videoHeaderEl = $('<h2>').text('YouTube Travel Guide: ');
-    videoContainerEl.append(videoHeaderEl);
+    const cityName = toAirportEl.val().trim();
+    // 4 5
+    const youTubeApi = `https://www.googleapis.com/youtube/v3/search?&type=video&videoDefinition=high&part=snippet&q=${cityName}+tour&key=AIzaSyDJdWQxhrMsK9vQQYEqlKgH53uK3xnf744&maxResults=30`;
+    console.log(cityName);
+
+    videoAreaEl.text('');
+    let videoHeaderEl = $('<h2 id="video-header">').text('YouTube Travel Guide: ');
+    videoAreaEl.append(videoHeaderEl);
+    // let nextPageToken = "";
 
     fetch(youTubeApi)
     .then(function(response){       
@@ -31,8 +23,10 @@ var showVideos = function(){
             console.log(data);       
             let videos = data.items;
             for(video of videos) {
-                var cityvideo = `<img src='${video.snippet.thumbnails.medium.url}'>`
-                videoContainerEl.append(cityvideo);
+                let theVideo = '';           
+                theVideo = `<iframe width=300 src="http://www.youtube.com/embed/${video.id.videoId}" frameborder="0" allowfullscreen></iframe>`
+                $("#theVideos").append(theVideo)
+     
             }
         });
         

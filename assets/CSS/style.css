@@ -32,3 +32,22 @@ h1,h2,h3,h4,h5,h6 {
     margin: auto;
 }
 #map { height: 350px; }
+
+#theVideos{
+    display: grid;
+    grid-auto-flow: column;
+    padding: 0;
+    grid-auto-columns: 4%;
+    gap: 0.1rem;   
+  
+}
+
+#video-guide{
+    cursor: pointer;
+}
+
+#media-scroller{
+    display: grid;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+}
