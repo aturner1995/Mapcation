@@ -445,6 +445,7 @@ const searchForm = (e) => {
     searchRestaurantInfo(toCity);
     saveRecentSearch(fromCity, toCity, departDate, returnDate, travelerAmount);
     displayFavLocations();
+    showVideos();
 }
 
 
