@@ -425,6 +425,7 @@ const recentSearchAgain = (e) => {
     searchFlightInfo(fromCity, toCity, departDate, returnDate, travelerAmount);
     searchTouristInfo(toCity);
     searchRestaurantInfo(toCity);
+    showVideos(toCity);
 }
 
 
@@ -445,7 +446,7 @@ const searchForm = (e) => {
     searchRestaurantInfo(toCity);
     saveRecentSearch(fromCity, toCity, departDate, returnDate, travelerAmount);
     displayFavLocations();
-    showVideos();
+    showVideos(toCity);
 }
 
 
