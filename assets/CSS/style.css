@@ -36,10 +36,27 @@ h1,h2,h3,h4,h5,h6 {
     position: relative;
     z-index: 0;
 }
+#map { height: 350px; }
+
+
+#theVideos{
+    display: grid;
+    grid-auto-flow: column;
+    padding: 0;
+    grid-auto-columns: 4%;
+    gap: 0.1rem;   
+  
+}
+
+
+#media-scroller{
+    display: grid;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+}
 
 .fav-places, .recent-search {
     min-height: 250px;
 }
   
-#map { height: 350px; }
 
