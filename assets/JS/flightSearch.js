@@ -428,9 +428,16 @@ const recentSearchAgain = (e) => {
     showVideos(toCity);
 }
 
+const getParams = () => {
+    let toCity = document.location.search.split('=')[1];
+    console.log('toCity:', toCity);
+    toAirportEl.val(toCity);
+}
+
 
 const init = () => {
     displayRecentSearch();
+    getParams();
 }
 
 const searchForm = (e) => {
