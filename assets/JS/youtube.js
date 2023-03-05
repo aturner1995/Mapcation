@@ -23,7 +23,7 @@ var showVideos = function(toCity){
             let videos = data.items;
             for(video of videos) {
                 let theVideo = '';           
-                theVideo = `<iframe width=300 src="http://www.youtube.com/embed/${video.id.videoId}" frameborder="0" allowfullscreen></iframe>`
+                theVideo = `<iframe width=300 src="https://www.youtube.com/embed/${video.id.videoId}" frameborder="0" allowfullscreen></iframe>`
                 
                 $("#theVideos").append(theVideo);
      

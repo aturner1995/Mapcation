@@ -17,7 +17,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar" role="navigation" aria-label="main navigation">
+        <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
                 <a href="#" class="navbar-item">
                     <img src="./assets/images/logo.png" alt="Mapcation Logo - A site for planning travel"
@@ -44,13 +44,82 @@
         </nav>
     </header>
 
-    <div class="most-searched">
-        <section class="hero">
-            <div class="is-flex is-align-content-center hero-text">
-              <h1 class="has-text-white">Let us help you plan a confident, luxury vacation!</h1>
-              <button class="button is-primary"><a class="m has-text-white" href="https://docs.google.com/document/d/1bh9RVYNDSWy8O6YY4umi1tltKiWFLunOzmdg4LGSyy4/edit?usp=sharing">Learn More</a></button>
+    <section class="hero">
+        <div class="is-flex is-align-content-center hero-text">
+          <h1 class="has-text-white">Let us help you plan a confident, luxury vacation!</h1>
+          <button class="button is-primary"><a class="m has-text-white" href="/travel-planning.html">Start Planning</a></button>
+        </div>
+    </section>
+
+    <div class="columns m-5">
+        <div class="column is-one-quarter">
+            <div class="card">
+                <div class="card-image">
+                <figure class="image is-4by3">
+                    <img src="./assets/images/airline.jpg" alt="Placeholder image">
+                </figure>
+                </div>
+                <div class="card-content">           
+
+                <div class="content">
+                    <p class="title is-4">Airline API Integration</p>    
+                    <br>           
+                    Mapcation integrates with a flight finder API, displaying real-time flight data from multiple airlines, sorting and filtering results by price, duration, and airline.                </div>
+                </div>
             </div>
-        </section>
+        </div>
+        <div class="column is-one-quarter">
+            <div class="card">
+                <div class="card-image">
+                <figure class="image is-4by3">
+                    <img src="./assets/images/sview.jpg" alt="Placeholder image">
+                </figure>
+                </div>
+                <div class="card-content">           
+
+                <div class="content">
+                    <p class="title is-4">Trip Advisor API Integration</p>     
+                    <br>
+                    Mapcation showcases top-rated tourist attractions and activities with Trip Advisor API, allowing users to browse through photos, reviews, and ratings to plan their trip.          </div>
+                </div>
+            </div>
+        </div>
+        <div class="column is-one-quarter">
+            <div class="card">
+                <div class="card-image">
+                <figure class="image is-4by3">
+                    <img src="./assets/images/navigation.jpg" alt="Placeholder image">
+                </figure>
+                </div>
+                <div class="card-content">           
+
+                <div class="content">
+                    <p class="title is-4">Open Street Maps API Integration</p>  
+                    <br>             
+                    Mapcation displays the location of the chosen destination and top-rated tourist attractions with Open Street Maps API, letting users zoom in and out on the map.
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="column is-one-quarter">
+            <div class="card">
+                <div class="card-image">
+                <figure class="image is-4by3">
+                    <img src="./assets/images/youtube.jpg" alt="Placeholder image">
+                </figure>
+                </div>
+                <div class="card-content">           
+
+                <div class="content">
+                    <p class="title is-4">YouTube API Integration</p>               
+                    <br>
+                    Mapcation features YouTube API integration, allowing users to access videos about their chosen travel destination. Users can browse a selection of videos and watch them within the app.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="most-searched">
         <h2 class="m-3">Most Searched:</h2>
         <div class="columns m-3">
             <div class="card column mx-2">
@@ -80,85 +149,6 @@
         </div>    
     </div>
 
-    <div class="columns ">
-        <div class="column is-one-quarter">
-            <div class="card">
-                <div class="card-image">
-                <figure class="image is-4by3">
-                    <img src="./assets/images/airline.jpg" alt="Placeholder image">
-                </figure>
-                </div>
-                <div class="card-content">           
-
-                <div class="content">
-                    <p class="title is-4">Airline API Integration</p>    
-                    <br>           
-
-                    Mapcation will be integrated with a popular flight finder API that will allow users to search for flights to their chosen destinations based on date and time preferences. The API will retrieve real-time flight data from multiple airlines and display the results to the user. Users will also be able to sort and filter the results based on factors such as price, duration, and airline.
-
-                </div>
-                </div>
-            </div>
-        </div>
-        <div class="column is-one-quarter">
-            <div class="card">
-                <div class="card-image">
-                <figure class="image is-4by3">
-                    <img src="./assets/images/sview.jpg" alt="Placeholder image">
-                </figure>
-                </div>
-                <div class="card-content">           
-
-                <div class="content">
-                    <p class="title is-4">Trip Advisor API Integration</p>     
-                    <br>          
-
-                    Mapcation will be integrated with Trip Advisor API to showcase the top-rated tourist attractions and activities in the user's chosen travel destination. Users will be able to browse through photos, reviews, and ratings to help them decide which attractions to visit during their trip.
-
-
-                </div>
-                </div>
-            </div>
-        </div>
-        <div class="column is-one-quarter">
-            <div class="card">
-                <div class="card-image">
-                <figure class="image is-4by3">
-                    <img src="./assets/images/navigation.jpg" alt="Placeholder image">
-                </figure>
-                </div>
-                <div class="card-content">           
-
-                <div class="content">
-                    <p class="title is-4">Open Street Maps API Integration</p>  
-                    <br>             
-
-                    Mapcation will be integrated with Open Street Maps API to display the location of the chosen destination and the top-rated tourist attractions. Users will be able to zoom in and out on the map to get a better understanding of the surrounding areas.
-
-                </div>
-                </div>
-            </div>
-        </div>
-        <div class="column is-one-quarter">
-            <div class="card">
-                <div class="card-image">
-                <figure class="image is-4by3">
-                    <img src="./assets/images/youtube.jpg" alt="Placeholder image">
-                </figure>
-                </div>
-                <div class="card-content">           
-
-                <div class="content">
-                    <p class="title is-4">YouTube API Integration</p>               
-                    <br>             
-
-                    Mapcation will be integrated with YouTube API to showcase videos about the chosen travel destination. Users will be able to browse through a selection of videos and watch them within the app.
-
-                </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div id="map" class="m-5">
         
     </div>
