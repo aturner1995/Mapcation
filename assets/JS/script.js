@@ -16,13 +16,11 @@ $(document).ready(function () {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
    
-    // L.marker([51.5, -0.09]).addTo(map)
-    // .openPopup();
 
     var popup = L.popup();
 
     function onMapClick(e) {
-
+        L.marker(e.latlng).addTo(map);
         popup
             .setLatLng(e.latlng)
             .setContent("You clicked the map at " + e.latlng.toString())
