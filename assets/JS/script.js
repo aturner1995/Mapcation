@@ -29,5 +29,16 @@ $(document).ready(function () {
 
     map.on('click', onMapClick);
 
+    // Pass Search parameters to the travel planning HTML
+    const mostSearchBtn = $('.search-btn')
 
+    const searchBtnHandle = (e) => {
+        e.preventDefault();
+        toCity = $(e.target).text();
+
+        let queryString = `/travel-planning.html?q=${toCity}`;
+        location.assign(queryString);
+
+    }
+    mostSearchBtn.on('click', searchBtnHandle);  
 });
