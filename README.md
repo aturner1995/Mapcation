@@ -1,5 +1,7 @@
 # group-project-1
 
+## Mapcation
+
 ## Contents
 
 1: Project Description 
@@ -10,7 +12,7 @@
 6: Contributions
 
 ## Project Description 
-This is a group project using four serverside APIs. We are using Amadeus, Foursquare, OpenStreet map and YouTube APIs to get out web application working.
+Mapcation is a group project using four serverside APIs. We are using Amadeus, Foursquare, OpenStreet map and YouTube APIs to get out web application working.
 You can get real time flights and fare for the flights.You will get suggestions about popular places and restaurants at your destination. you can add the resturant and places to the map and drop pins there. You can choose to watch from multiple youtube videos appeared on page about destination.
 
 ## Future Work
@@ -29,12 +31,12 @@ https://aturner1995.github.io/Mapcation/index.html
 ## Mock-Up
 
 The following image shows the web application's appearance and functionality:
-![The app includes a search option, a list of itenararies, and popular places and map](./Assets/images/one.png)
-(./Assets/images/Two.png)
-(./Assets/images/three.png)
-(./Assets/images/four.png)
-(./Assets/images/five.png)
-(./Assets/images/six.png)
+![The app includes a search option, a list of itenararies, and popular places and map](./assets/images/one.png)
+![The app includes a search option, a list of itenararies, and popular places and map](./assets/images/Two.png)
+![The app includes a search option, a list of itenararies, and popular places and map](./assets/images/three.png)
+![The app includes a search option, a list of itenararies, and popular places and map](./assets/images/four.png)
+![The app includes a search option, a list of itenararies, and popular places and map](./assets/images/five.png)
+![The app includes a search option, a list of itenararies, and popular places and map](./assets/images/six.png)
 
 
 ## User Story
