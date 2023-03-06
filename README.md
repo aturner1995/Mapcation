@@ -86,8 +86,12 @@ A hero section should be added to the website.
 The hero section should be styled using the Bulma CSS framework and CSS.
 The hero section should match the wireframe provided.
 
+## Acknowledgement
+We appriciate all the help from out instructer and teaching assistant. 
+We are thankful for the oppertunity to work on this project from UNB bootcamp.
+
 ## contribution
-Aaron, Matt, Sehar, Arash 
+Aaron, Matt, Sehar and Arash 
 
 
 
