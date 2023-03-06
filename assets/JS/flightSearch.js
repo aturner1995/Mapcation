@@ -122,7 +122,6 @@ const displayFlightResults = (data, fromCity, toCity, travelerAmount) => {
         return;
     }
     // Display the flight results on the page as a card for each with the flight number, price and # of stops
-    console.log(data.data)
     data.data.forEach((result) => {
         let resultsTextEl = $('<div>');
         resultsTextEl.addClass('card columns my-2');
@@ -132,7 +131,7 @@ const displayFlightResults = (data, fromCity, toCity, travelerAmount) => {
         result.itineraries.forEach((flight) => {
           let carrierEl = $('<p>').addClass('column');
           let stopsEl = $('<p>').addClass('column');
-          stopsEl.text(flight.segments.length-1 + 'Stops(s)');
+          stopsEl.text(flight.segments.length-1 + ' Stops(s)');
           carrierEl.text(flight.segments[0].carrierCode + flight.segments[0].number);
           
           resultsTextEl.append(carrierEl, stopsEl, priceEl);
@@ -156,7 +155,7 @@ const searchTouristInfo = async (city) => {
                 Authorization: 'fsq3arJhFAddvYdLjpsFcyafVbELedluIByUHga/lfOF/XM='
             }
         });
-
+        // If response is ok then the photos and description are retrived from the foursquare API
         if (response.ok) {
             const data = await response.json();
             for (const place of data.results) {
@@ -222,7 +221,7 @@ const searchRestaurantInfo = async (city) => {
                 Authorization: 'fsq3arJhFAddvYdLjpsFcyafVbELedluIByUHga/lfOF/XM='
             }
         });
-    
+        // If response is ok the photo and description for the location is found
         if (response.ok) {
             const data = await response.json();
             for (const place of data.results) {
@@ -303,7 +302,7 @@ const displayRestaurantInfo = (places) => {
         let resultsTextEl = $('<div>').addClass('card my-2 columns');
         let attractionNameEl = $('<h4>').addClass('column');
         let attractionImgEl = $('<img>').addClass('column suggestion-card-image');
-        let descriptionEl = $('<p>');
+        let descriptionEl = $('<p>').text(place.description);
         let addBtn = $('<button>').text('ADD').addClass('button is-primary ml-2 is-small add-btn');
         attractionImgEl.attr('src', place.picture).addClass('image');
         attractionNameEl.text(place.name).append(addBtn).data('lat', place.location.latitude).data('long', place.location.longitude);

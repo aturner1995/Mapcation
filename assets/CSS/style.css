@@ -94,6 +94,7 @@ h1,h2,h3,h4,h5,h6 {
 .hero-text button:hover {
   background-color: #000;
   color: #fff;
+}
 
 .card-content{
   text-decoration: none;
@@ -102,3 +103,4 @@ h1,h2,h3,h4,h5,h6 {
 
 .card-content:hover{
   color: rgb(75, 75, 179);
+}
