@@ -26,6 +26,8 @@ var showVideos = function(toCity){
                 theVideo = `<iframe width=300 src="https://www.youtube.com/embed/${video.id.videoId}" frameborder="0" allowfullscreen></iframe>`
                 
                 $("#theVideos").append(theVideo);
+
+                console.log(data[9]);
      
             }
         });
