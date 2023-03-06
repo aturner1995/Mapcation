@@ -122,22 +122,27 @@ const displayFlightResults = (data, fromCity, toCity, travelerAmount) => {
         return;
     }
     // Display the flight results on the page as a card for each with the flight number, price and # of stops
+    console.log(data.data)
     data.data.forEach((result) => {
         let resultsTextEl = $('<div>');
         resultsTextEl.addClass('card columns my-2');
-        let carrierEl = $('<p>').addClass('column');
-        let flightTimeEl = $('<p>');
-        let stopsEl = $('<p>').addClass('column');
         let priceEl = $('<p>').addClass('column');
-        stopsEl.text(result.itineraries[0].segments.length-1 + ' Stop(s)');
-        carrierEl.text(result.itineraries[0].segments[0].carrierCode + result.itineraries[0].segments[0].number);
         priceEl.text('$' + result.price.total + ' ' + result.price.currency);
-        resultsTextEl.append(carrierEl, stopsEl, priceEl);
+        
+        result.itineraries.forEach((flight) => {
+          let carrierEl = $('<p>').addClass('column');
+          let stopsEl = $('<p>').addClass('column');
+          stopsEl.text(flight.segments.length-1 + 'Stops(s)');
+          carrierEl.text(flight.segments[0].carrierCode + flight.segments[0].number);
+          
+          resultsTextEl.append(carrierEl, stopsEl, priceEl);
+        });
+        
         searchResultsEl.append(resultsTextEl);
-    });
+      });      
 };
 
-
+// Foursquare API search for the final destination city
 const searchTouristInfo = async (city) => {
     const apiKey = 'fsq3arJhFAddvYdLjpsFcyafVbELedluIByUHga/lfOF/XM=';
     let apiUrl = `https://api.foursquare.com/v3/places/search?query=top%20picks&near=${city}&sort=POPULARITY&limit=10&exclude_all_chains=true`;
@@ -202,7 +207,7 @@ const searchTouristInfo = async (city) => {
     }
 };
 
-
+// Foursquare API call for top restaurant selections in the destination city
 const searchRestaurantInfo = async (city) => {
     const apiKey = 'fsq3arJhFAddvYdLjpsFcyafVbELedluIByUHga/lfOF/XM=';
     let apiUrl = `https://api.foursquare.com/v3/places/search?query=restaurants&near=${city}&sort=POPULARITY&limit=10&exclude_all_chains=true`;
