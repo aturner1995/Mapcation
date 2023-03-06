@@ -36,7 +36,7 @@ const searchBtnHandle = (e) => {
     e.preventDefault();
     toCity = $(e.target).text();
 
-    let queryString = `/travel-planning.html?q=${toCity}`;
+    let queryString = `./travel-planning.html?q=${toCity}`;
     location.assign(queryString);
 
 }
