@@ -164,7 +164,8 @@ const searchTouristInfo = async (city) => {
                 const descriptionURL = `https://api.foursquare.com/v3/places/${place.fsq_id}/tips?sort=POPULAR`;
                 let placeObject = {
                     id: place.fsq_id,
-                    name: place.name
+                    name: place.name,
+                    location: place.geocodes.main
                 };
                 const photoResponse = await fetch(photoUrl, {
                     method: 'GET',
@@ -229,7 +230,8 @@ const searchRestaurantInfo = async (city) => {
                 const descriptionURL = `https://api.foursquare.com/v3/places/${place.fsq_id}/tips?sort=POPULAR`;
                 let placeObject = {
                     id: place.fsq_id,
-                    name: place.name
+                    name: place.name,
+                    location: place.geocodes.main
                 };
                 const photoResponse = await fetch(photoUrl, {
                     method: 'GET',
@@ -284,7 +286,7 @@ const displayTouristInfo = (places) => {
         let descriptionEl = $('<p>');
         let addBtn = $('<button>').text('ADD').addClass('button is-primary ml-2 is-small add-btn');
         attractionImgEl.attr('src', place.picture);
-        attractionNameEl.text(place.name).append(addBtn);
+        attractionNameEl.text(place.name).append(addBtn).data('lat', place.location.latitude).data('long', place.location.longitude);
         descriptionEl.text(place.description);
         let textContainerEl = $('<div>').addClass('text-container pl-1');
         textContainerEl.append(attractionNameEl, descriptionEl);
@@ -304,8 +306,7 @@ const displayRestaurantInfo = (places) => {
         let descriptionEl = $('<p>');
         let addBtn = $('<button>').text('ADD').addClass('button is-primary ml-2 is-small add-btn');
         attractionImgEl.attr('src', place.picture).addClass('image');
-        attractionNameEl.text(place.name).append(addBtn);
-        descriptionEl.text(place.description);
+        attractionNameEl.text(place.name).append(addBtn).data('lat', place.location.latitude).data('long', place.location.longitude);
         let textContainerEl = $('<div>').addClass('text-container pl-1');
         textContainerEl.append(attractionNameEl, descriptionEl);
         resultsTextEl.append(attractionImgEl, textContainerEl);
@@ -319,19 +320,26 @@ const addLocation = (e) => {
     let nameEl = card.find('h4');
     let imgEl = card.find('img');
 
-    let name = nameEl.text().replace('ADD','')
+    let name = $(nameEl).text().replace('ADD','');
 
     if (!(recentSearch[recentSearch.length - 1].savedLocations.some(location => location.name === name))) {
         let savedLocation = {
             name: name,
-            image: imgEl.attr('src')
+            image: imgEl.attr('src'),
+            lat: nameEl.data('lat'),
+            long: nameEl.data('long')
         };
-    
         recentSearch[recentSearch.length - 1].savedLocations.push(savedLocation);
         localStorage.setItem('recentSearch', JSON.stringify(recentSearch));
+
+        // Add marker to the map
+        addMarker(recentSearch);
+
         displayFavLocations();
     }
 };
+
+
 
 const displayFavLocations = () => {
     let recentSearch = JSON.parse(localStorage.getItem('recentSearch')) || [];
@@ -352,6 +360,14 @@ const displayFavLocations = () => {
         localStorage.setItem('recentSearch', JSON.stringify(recentSearch));
         displayFavLocations();
     });
+}
+
+// Add marker to the map for each of the saved locatons. The name will be attached as a popup.
+const addMarker = (recentSearch) => {
+    recentSearch[recentSearch.length-1].savedLocations.forEach(place => {
+        let marker = L.marker([place.lat, place.long]).addTo(map);
+        marker.bindPopup(place.name).openPopup();
+    })
 }
 
 
@@ -431,6 +447,7 @@ const recentSearchAgain = (e) => {
     searchFlightInfo(fromCity, toCity, departDate, returnDate, travelerAmount);
     searchTouristInfo(toCity);
     searchRestaurantInfo(toCity);
+    addMarker(recentSearch);
     showVideos(toCity);
 }
 
