@@ -132,3 +132,12 @@ h1,h2,h3,h4,h5,h6 {
   align-items: center;
   flex-direction: column;
 }
+
+.card-content{
+  text-decoration: none;
+  color: #000;  
+}
+
+.card-content:hover{
+  color: rgb(75, 75, 179);
+}
