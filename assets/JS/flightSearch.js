@@ -273,7 +273,7 @@ const searchRestaurantInfo = async (city) => {
     }
 };
 
-
+// Display the tourist attraction info on a card with the name, image and description for 10 selections
 const displayTouristInfo = (places) => {
     touristResultsEl.text('');
     let headerEl = $('<h2>').text('Popular Attractions:');
@@ -293,7 +293,7 @@ const displayTouristInfo = (places) => {
         touristResultsEl.append(resultsTextEl);
     })
 };
-
+// Display the restaurant info on a card with the name, image and description for 10 selections
 const displayRestaurantInfo = (places) => {
     restaurantResultsEL.text('');
     let headerEl = $('<h2>').text('Popular Restaurants:');
@@ -312,7 +312,7 @@ const displayRestaurantInfo = (places) => {
         restaurantResultsEL.append(resultsTextEl);
     })
 }
-
+// Add a location from the top attractions and restaurants to local storage
 const addLocation = (e) => {
     let recentSearch = JSON.parse(localStorage.getItem('recentSearch')) || [];
     let card = $(e.target).closest('.card');
@@ -339,18 +339,18 @@ const addLocation = (e) => {
 };
 
 
-
+// Display the user saved locations from their search on the page
 const displayFavLocations = () => {
     let recentSearch = JSON.parse(localStorage.getItem('recentSearch')) || [];
     favLocationsEl.empty();
-
+    // Display the saved locations for the last item in the recent search object (current search)
     recentSearch[recentSearch.length-1].savedLocations.forEach(place => {
         let locationDisplayEl = $('<button>').text(place.name).addClass('button is-primary m-5 pr-0 fav-btn');
         let deleteBtn = $('<button>').addClass('delete is-large ml-2');
         locationDisplayEl.append(deleteBtn);
         favLocationsEl.append(locationDisplayEl);
     })
-
+    // Delete button handler for the saved locations
     $('body').on('click', 'button.delete', (e) => {
         e.stopPropagation();
         let index = $(e.target).closest('.fav-btn').index();
@@ -369,7 +369,7 @@ const addMarker = (recentSearch) => {
     })
 }
 
-
+// Save the recent search in the local storage
 const saveRecentSearch = (fromCity, toCity, departDate, returnDate, travelerAmount) => {
 
     if (travelerAmount === 'Number of travelers') {
@@ -377,7 +377,7 @@ const saveRecentSearch = (fromCity, toCity, departDate, returnDate, travelerAmou
     }
 
     let recentSearch = JSON.parse(localStorage.getItem('recentSearch')) || [];
-
+    // The object that will be saved in local storage
     const searchObj = {
         fromCity: fromCity,
         toCity: toCity,
@@ -402,7 +402,7 @@ const saveRecentSearch = (fromCity, toCity, departDate, returnDate, travelerAmou
     displayRecentSearch(recentSearch);
 }
 
-
+// Display the recent search list
 const displayRecentSearch = () => {
     let recentSearch = JSON.parse(localStorage.getItem('recentSearch')) || [];
     savedSearchesEl.empty();
@@ -412,7 +412,7 @@ const displayRecentSearch = () => {
         let deleteBtn = $('<button>').addClass('delete is-large ml-2');
         cityDisplayEl.append(deleteBtn);
         savedSearchesEl.append(cityDisplayEl);
-
+        // Delete button of recent search items 
         deleteBtn.on('click', (e) => {
             e.stopPropagation();
             let index = $(e.target).closest('.recent-btn').data('location');
@@ -427,14 +427,14 @@ const displayRecentSearch = () => {
 const recentSearchAgain = (e) => {
     let recentSearch = JSON.parse(localStorage.getItem('recentSearch')) || [];
     let index = $(e.target).data('location')
-
+    // Get data from the user click to properly call the API's
     let clickedSearch = recentSearch[index];
     let fromCity = recentSearch[index].fromCity;
     let toCity = recentSearch[index].toCity;
     let departDate = recentSearch[index].departDate;
     let returnDate = recentSearch[index].returnDate;
     let travelerAmount = recentSearch[index].travelerAmount;
-
+    // Moves the search from the current position to the last item in the stored object
     recentSearch.splice(index, 1);
 
     recentSearch.push(clickedSearch);
@@ -449,18 +449,18 @@ const recentSearchAgain = (e) => {
     addMarker(recentSearch);
     showVideos(toCity);
 }
-
+// When the user selects the Top Searches the data is passed to the user search form
 const getParams = () => {
     let toCity = document.location.search.split('=')[1];
     toAirportEl.val(toCity);
 }
 
-
+// Sets up the page with recent searches for the user when it is loaded
 const init = () => {
     displayRecentSearch();
     getParams();
 }
-
+// Get the user provided data from the search form. Call the API's from that data
 const searchForm = (e) => {
     e.preventDefault();
     let fromCity = fromAirportEl.val().trim();
@@ -476,7 +476,7 @@ const searchForm = (e) => {
     displayFavLocations();
     showVideos(toCity);
 }
-
+// Update the map view when the user selects a final destination
 const updateMap = (toCityData) => {
     map.setView([toCityData.data[0].geoCode.latitude, toCityData.data[0].geoCode.longitude], 13);
 }
