@@ -64,6 +64,7 @@ const searchFlightInfo = async (fromCity, toCity, departDate, returnDate, travel
             }
         });
         let toCityData = await toCityResponse.json();
+        updateMap(toCityData);
         let toIataCode = toCityData.data[0].iataCode;
 
         apiUrl += `&originLocationCode=${fromIataCode}&destinationLocationCode=${toIataCode}`;
@@ -430,7 +431,6 @@ const recentSearchAgain = (e) => {
 
 const getParams = () => {
     let toCity = document.location.search.split('=')[1];
-    console.log('toCity:', toCity);
     toAirportEl.val(toCity);
 }
 
@@ -456,6 +456,10 @@ const searchForm = (e) => {
     showVideos(toCity);
 }
 
+const updateMap = (toCityData) => {
+    map.setView([toCityData.data[0].geoCode.latitude, toCityData.data[0].geoCode.longitude], 13);
+}
+
 
 // Event Listener for form submission
 searchFormEl.on('submit', searchForm)
@@ -463,15 +467,6 @@ searchFormEl.on('submit', searchForm)
 $('body').on('click', 'button.add-btn', addLocation);
 
 $('body').on('click', 'button.recent-btn', recentSearchAgain)
-
-
-// Check for click events on the navbar burger icon
-$(".navbar-burger").click(() => {
-    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-    $(".navbar-burger").toggleClass("is-active");
-    $(".navbar-menu").toggleClass("is-active");
-
-});
 
 // JQuery datepicker with custom format and restrictions for dates that can be selected
 $(() => {
