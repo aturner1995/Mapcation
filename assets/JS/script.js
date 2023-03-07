@@ -1,4 +1,3 @@
-
 // Check for click events on the navbar burger icon
 $(".navbar-burger").click(function () {
 
@@ -6,7 +5,7 @@ $(".navbar-burger").click(function () {
     $(".navbar-burger").toggleClass("is-active");
     $(".navbar-menu").toggleClass("is-active");
 });
-
+// Setup the map on the page with the inital view on London
 var map = L.map('map');
 $('#map').append(map)
 map.setView([51.505, -0.09], 13);
@@ -17,7 +16,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 var popup = L.popup();
-
+// Allows user to click on map to provide a marker
 function onMapClick(e) {
 
     L.marker(e.latlng).addTo(map);
