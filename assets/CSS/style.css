@@ -57,14 +57,11 @@ h1,h2,h3,h4,h5,h6 {
 .fav-places, .recent-search {
     min-height: 100px;
 }
-  
 
-.hero-img {
-  width: 100%;
-  }
-
-.hero-body {
-  padding: 0;
+.hero {
+  background-image: url('../images/Shanghai.jpg');
+  background-size: cover;
+  background-position: center;
 }
 
 .hero-text {
