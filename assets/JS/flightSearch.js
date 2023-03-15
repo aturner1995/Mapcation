@@ -451,8 +451,10 @@ const recentSearchAgain = (e) => {
 }
 // When the user selects the Top Searches the data is passed to the user search form
 const getParams = () => {
-    let toCity = document.location.search.split('=')[1];
-    toAirportEl.val(toCity);
+    let toCity = decodeURI(document.location.search.split('=')[1]);
+    if (toCity !== 'undefined') {
+        toAirportEl.val(toCity);
+    }
 }
 
 // Sets up the page with recent searches for the user when it is loaded
