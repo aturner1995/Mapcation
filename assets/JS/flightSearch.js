@@ -451,8 +451,11 @@ const recentSearchAgain = (e) => {
 }
 
 const getParams = () => {
-    let toCity = document.location.search.split('=')[1];
-    toAirportEl.val(toCity);
+    let toCity = decodeURI(document.location.search.split('=')[1]);
+    console.log(toCity)
+    if (toCity !== 'undefined') {
+        toAirportEl.val(toCity);
+    }
 }
 
 
